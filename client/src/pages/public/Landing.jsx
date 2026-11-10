@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { isSupabaseConfigured } from '../../lib/supabase.js';
 import CosmicDotsCanvas from '../../components/CosmicDotsCanvas.jsx';
@@ -15,12 +15,42 @@ import {
   Instagram,
   Copy,
   Check,
-  Crown
+  Crown,
+  BookmarkCheck,
+  Languages
 } from 'lucide-react';
 
 export default function Landing() {
+  const [activeTab, setActiveTab] = useState('problem');
   const [demoTopic, setDemoTopic] = useState('3 fitness mistakes that ruin fat loss');
   const [copied, setCopied] = useState(false);
+
+  const navItems = [
+    { id: 'problem', label: 'The Problem', href: '#problem' },
+    { id: 'demo', label: 'Interactive Demo', href: '#demo' },
+    { id: 'features', label: 'Features', href: '#features' },
+    { id: 'pricing', label: 'Pricing', href: '#pricing' }
+  ];
+
+  // Active section tracking on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY + 200;
+      for (const item of navItems) {
+        const el = document.getElementById(item.id);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollY >= top && scrollY < top + height) {
+            setActiveTab(item.id);
+            break;
+          }
+        }
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const sampleDemo = {
     hook: "Stop doing cardio for 2 hours! 🛑 Here is why your fat loss is stalling:",
@@ -52,28 +82,41 @@ export default function Landing() {
 
       {/* Floating Horizontal Capsule / Circular Dock Navbar */}
       <div className="fixed top-5 inset-x-0 z-50 flex justify-center px-4 pointer-events-none">
-        <header className="pointer-events-auto flex items-center justify-between gap-4 sm:gap-8 px-4 sm:px-6 py-2.5 bg-neutral-950/85 backdrop-blur-2xl border border-white/15 rounded-full shadow-[0_12px_40px_rgba(0,0,0,0.8)] max-w-4xl w-full transition-all duration-300 hover:border-white/25">
+        <header className="pointer-events-auto flex items-center justify-between gap-3 sm:gap-6 px-3.5 sm:px-5 py-2 bg-neutral-950/85 backdrop-blur-2xl border border-white/15 rounded-full shadow-[0_12px_40px_rgba(0,0,0,0.85)] max-w-4xl w-full transition-all duration-300 hover:border-white/25">
           {/* Logo Pill Circle */}
-          <Link to="/" className="flex items-center gap-2.5 group">
+          <Link to="/" className="flex items-center gap-2.5 group pl-1">
             <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white shadow-[0_0_15px_rgba(96,165,250,0.3)] group-hover:scale-105 transition">
               <Sparkles className="w-4 h-4 text-blue-400" />
             </div>
             <span className="font-semibold text-sm sm:text-base text-white tracking-tight">CaptionCraft</span>
           </Link>
 
-          {/* Navigation Links inside circular pill */}
-          <nav className="hidden md:flex items-center gap-7 text-xs font-medium text-neutral-400">
-            <a href="#problem" className="hover:text-white transition">The Problem</a>
-            <a href="#demo" className="hover:text-white transition">Interactive Demo</a>
-            <a href="#features" className="hover:text-white transition">Features</a>
-            <Link to="/pricing" className="hover:text-white transition">Pricing</Link>
+          {/* Interactive Navigation Track: Each option clicks into a Horizontal Circle / Pill */}
+          <nav className="hidden md:flex items-center p-1 bg-white/[0.04] border border-white/10 rounded-full gap-1">
+            {navItems.map((item) => {
+              const isActive = activeTab === item.id;
+              return (
+                <a
+                  key={item.id}
+                  href={item.href}
+                  onClick={() => setActiveTab(item.id)}
+                  className={`relative px-4 py-1.5 text-xs rounded-full transition-all duration-300 ${
+                    isActive
+                      ? 'bg-white text-black font-semibold shadow-[0_2px_12px_rgba(255,255,255,0.3)] scale-100'
+                      : 'text-neutral-400 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  {item.label}
+                </a>
+              );
+            })}
           </nav>
 
           {/* Action Buttons */}
           <div className="flex items-center gap-2">
             <Link
               to="/login"
-              className="px-3.5 py-1.5 text-xs font-medium text-neutral-300 hover:text-white transition"
+              className="px-3 py-1.5 text-xs font-medium text-neutral-300 hover:text-white transition"
             >
               Sign In
             </Link>
@@ -128,6 +171,7 @@ export default function Landing() {
 
             <a
               href="#demo"
+              onClick={() => setActiveTab('demo')}
               className="px-6 py-3 bg-white/10 hover:bg-white/15 text-neutral-200 border border-white/10 font-semibold text-xs sm:text-sm rounded-full backdrop-blur-md transition active:scale-95"
             >
               Interactive Demo
@@ -150,7 +194,7 @@ export default function Landing() {
       </section>
 
       {/* The Creator Bottleneck Section */}
-      <section id="problem" className="py-24 bg-neutral-950/80 border-t border-neutral-900 px-6 relative z-10">
+      <section id="problem" className="py-24 bg-neutral-950/80 border-t border-neutral-900 px-6 relative z-10 scroll-mt-24">
         <div className="max-w-5xl mx-auto space-y-12">
           <div className="text-center space-y-3">
             <h2 className="text-2xl md:text-4xl font-normal text-white tracking-tight">The Creator Bottleneck</h2>
@@ -202,7 +246,7 @@ export default function Landing() {
       </section>
 
       {/* Interactive Demo Simulator */}
-      <section id="demo" className="py-24 px-6 max-w-4xl mx-auto w-full relative z-10">
+      <section id="demo" className="py-24 px-6 max-w-4xl mx-auto w-full relative z-10 scroll-mt-24">
         <div className="text-center space-y-3 mb-12">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/5 border border-white/10 text-neutral-300 text-xs font-medium rounded-full">
             <Sparkles className="w-3 h-3 text-blue-400" />
@@ -276,8 +320,66 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Pricing Preview */}
-      <section className="py-24 bg-neutral-950/80 border-t border-neutral-900 px-6 text-center relative z-10">
+      {/* Dedicated Features Section */}
+      <section id="features" className="py-24 bg-neutral-950/90 border-t border-neutral-900 px-6 relative z-10 scroll-mt-24">
+        <div className="max-w-6xl mx-auto space-y-12">
+          <div className="text-center space-y-3">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-white/5 border border-white/10 rounded-full text-xs font-medium text-neutral-300">
+              <Layers className="w-3.5 h-3.5 text-blue-400" />
+              <span>Full-Stack Creator Power</span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-normal text-white tracking-tight">Engineered for Rapid Viral Growth</h2>
+            <p className="text-neutral-400 text-xs sm:text-sm max-w-md mx-auto">
+              Everything an Instagram creator or agency needs to publish high-retention reels every single day.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="p-6 bg-neutral-900/40 border border-neutral-800 rounded-3xl space-y-3 hover:border-white/20 transition">
+              <div className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-blue-400">
+                <Video className="w-5 h-5" />
+              </div>
+              <h3 className="text-base font-semibold text-white">Video-to-Caption</h3>
+              <p className="text-xs text-neutral-400 leading-relaxed">
+                Upload up to 60-second video clips. AI extracts spoken audio and visual frames to generate custom captions.
+              </p>
+            </div>
+
+            <div className="p-6 bg-neutral-900/40 border border-neutral-800 rounded-3xl space-y-3 hover:border-white/20 transition">
+              <div className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-cyan-400">
+                <TrendingUp className="w-5 h-5" />
+              </div>
+              <h3 className="text-base font-semibold text-white">3-Tier Hashtags</h3>
+              <p className="text-xs text-neutral-400 leading-relaxed">
+                Automatically categorized into High-reach, Medium, and Niche so your content gets discovered effortlessly.
+              </p>
+            </div>
+
+            <div className="p-6 bg-neutral-900/40 border border-neutral-800 rounded-3xl space-y-3 hover:border-white/20 transition">
+              <div className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-amber-400">
+                <Languages className="w-5 h-5" />
+              </div>
+              <h3 className="text-base font-semibold text-white">English, Hindi & Hinglish</h3>
+              <p className="text-xs text-neutral-400 leading-relaxed">
+                Choose the native language and tone that matches your audience: funny, motivational, or professional.
+              </p>
+            </div>
+
+            <div className="p-6 bg-neutral-900/40 border border-neutral-800 rounded-3xl space-y-3 hover:border-white/20 transition">
+              <div className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-400">
+                <BookmarkCheck className="w-5 h-5" />
+              </div>
+              <h3 className="text-base font-semibold text-white">Saved Sets & History</h3>
+              <p className="text-xs text-neutral-400 leading-relaxed">
+                Save winning hashtag groups to your library, search past generations, and copy to Instagram in 1 click.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Preview Section */}
+      <section id="pricing" className="py-24 bg-neutral-950/80 border-t border-neutral-900 px-6 text-center relative z-10 scroll-mt-24">
         <div className="max-w-4xl mx-auto space-y-6">
           <h2 className="text-3xl sm:text-4xl font-normal text-white tracking-tight">Simple, Creator-Friendly Pricing</h2>
           <p className="text-neutral-400 text-xs sm:text-sm max-w-md mx-auto">
