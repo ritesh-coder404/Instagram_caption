@@ -43,6 +43,8 @@ export default function App() {
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/admin/login" element={<Navigate to="/login" replace />} />
+          <Route path="/admin-login" element={<Navigate to="/login" replace />} />
           <Route path="/forbidden" element={<Forbidden />} />
 
           {/* User Portal Routes (Protected) */}
