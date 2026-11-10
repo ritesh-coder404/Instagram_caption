@@ -50,42 +50,45 @@ export default function Landing() {
         </div>
       )}
 
-      {/* Modern Minimal Floating Navbar */}
-      <header className="border-b border-white/10 bg-black/60 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      {/* Floating Horizontal Capsule / Circular Dock Navbar */}
+      <div className="fixed top-5 inset-x-0 z-50 flex justify-center px-4 pointer-events-none">
+        <header className="pointer-events-auto flex items-center justify-between gap-4 sm:gap-8 px-4 sm:px-6 py-2.5 bg-neutral-950/85 backdrop-blur-2xl border border-white/15 rounded-full shadow-[0_12px_40px_rgba(0,0,0,0.8)] max-w-4xl w-full transition-all duration-300 hover:border-white/25">
+          {/* Logo Pill Circle */}
           <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white shadow-[0_0_15px_rgba(255,255,255,0.15)] group-hover:scale-105 transition">
+            <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white shadow-[0_0_15px_rgba(96,165,250,0.3)] group-hover:scale-105 transition">
               <Sparkles className="w-4 h-4 text-blue-400" />
             </div>
-            <span className="font-semibold text-base text-white tracking-tight">CaptionCraft</span>
+            <span className="font-semibold text-sm sm:text-base text-white tracking-tight">CaptionCraft</span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8 text-xs font-medium text-neutral-400">
+          {/* Navigation Links inside circular pill */}
+          <nav className="hidden md:flex items-center gap-7 text-xs font-medium text-neutral-400">
             <a href="#problem" className="hover:text-white transition">The Problem</a>
             <a href="#demo" className="hover:text-white transition">Interactive Demo</a>
             <a href="#features" className="hover:text-white transition">Features</a>
             <Link to="/pricing" className="hover:text-white transition">Pricing</Link>
           </nav>
 
-          <div className="flex items-center gap-3">
+          {/* Action Buttons */}
+          <div className="flex items-center gap-2">
             <Link
               to="/login"
-              className="px-4 py-2 text-xs font-medium text-neutral-300 hover:text-white transition"
+              className="px-3.5 py-1.5 text-xs font-medium text-neutral-300 hover:text-white transition"
             >
               Sign In
             </Link>
             <Link
               to="/signup"
-              className="px-5 py-2 bg-white hover:bg-neutral-200 text-black font-semibold text-xs rounded-full transition-all shadow-md active:scale-95"
+              className="px-4 sm:px-5 py-1.5 sm:py-2 bg-white hover:bg-neutral-200 text-black font-semibold text-xs rounded-full transition-all shadow-md active:scale-95"
             >
               Start Free
             </Link>
           </div>
-        </div>
-      </header>
+        </header>
+      </div>
 
       {/* Hero Section — Deep Space Google Antigravity Cosmic Aesthetics */}
-      <section className="relative min-h-[82vh] flex items-center px-6 md:px-12 lg:px-20 overflow-hidden bg-black">
+      <section className="relative min-h-[90vh] flex items-center px-6 md:px-12 lg:px-20 overflow-hidden bg-black pt-28 md:pt-36">
         {/* Dynamic Interactive Celestial Particle Galaxy Canvas */}
         <CosmicDotsCanvas />
 
