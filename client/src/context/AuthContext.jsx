@@ -120,9 +120,10 @@ export function AuthProvider({ children }) {
     setProfile(null);
   };
 
-  const refreshProfile = async () => {
-    if (user?.id) {
-      return await fetchProfile(user.id);
+  const refreshProfile = async (targetId) => {
+    const idToFetch = targetId || user?.id;
+    if (idToFetch) {
+      return await fetchProfile(idToFetch);
     }
   };
 

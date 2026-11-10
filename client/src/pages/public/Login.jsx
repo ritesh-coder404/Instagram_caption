@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 
 export default function Login() {
-  const { login, loginWithGoogle } = useAuth();
+  const { login, loginWithGoogle, refreshProfile } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -27,9 +27,14 @@ export default function Login() {
 
     try {
       const data = await login(email.trim(), password);
-      // Determine redirection based on profile role
-      const userObj = data.user;
-      navigate('/app');
+      // Determine redirection based on profile role:
+      // If admin -> direct to /admin, if creator -> direct to /app
+      const userProfile = await refreshProfile(data.user?.id);
+      if (userProfile?.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/app');
+      }
     } catch (err) {
       setError(err.message || 'Invalid email or password.');
     } finally {
